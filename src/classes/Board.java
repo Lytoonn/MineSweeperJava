@@ -10,9 +10,9 @@ public class Board {
         Numbers();
     }
 
-    private char[][] board = new char[9][9];
-    private boolean[][] mines = new boolean[9][9];
-    private boolean[][] revealed = new boolean[9][9];
+    private final char[][] board = new char[9][9];
+    private final boolean[][] mines = new boolean[9][9];
+    private final boolean[][] revealed = new boolean[9][9];
 
     private void StartBoard() {
         for (int i = 0; i < 9; i++) {

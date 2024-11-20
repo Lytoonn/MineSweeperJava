@@ -8,16 +8,15 @@ import java.util.Scanner;
 public class Main {
 
     private static Player plr;
-    private static Board brd;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
         while(true) {
-            brd = new Board();
+            Board brd = new Board();
             plr = new Player(brd);
-            String aux = null;
-            int choice = -99;
+            String aux;
+            int choice;
 
             InitialMenu();
 

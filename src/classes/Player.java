@@ -12,7 +12,7 @@ public class Player {
     }
 
     private Scanner sc;
-    private Board brd;
+    private final Board brd;
     private boolean isOver = false;
     private String nickName;
     private String[] top10Wins = new String[10];
@@ -85,18 +85,6 @@ public class Player {
         }
     }
 
-    private int getRow(){
-        System.out.print("\nEnter the row number: ");
-        int aux = toInt(sc.next());
-        return aux;
-    }
-
-    private int getCol(){
-        System.out.print("Enter the col number: ");
-        int aux = toInt(sc.next());
-        return aux;
-    }
-
     private void LoadTable() {
         File file = new File("Top10.dat");
         if (!file.exists()) {
@@ -106,17 +94,13 @@ public class Player {
 
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             top10Wins = (String[]) ois.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception _) {}
     }
 
     private void SaveTable(){
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Top10.dat"))) {
             oos.writeObject(top10Wins);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        }catch(Exception _){}
     }
 
     public void printTop(){
@@ -130,7 +114,9 @@ public class Player {
 
     public void enterContinue(){
         System.out.println("Press Enter to continue");
-        try{System.in.read();}
-        catch(Exception e){}
+        try{
+            System.in.read()
+        }
+        catch(Exception _){}
     }
 }
