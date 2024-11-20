@@ -1,6 +1,7 @@
 package classes;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Player {
@@ -21,32 +22,59 @@ public class Player {
         getNickName();
         while(!isOver){
             brd.DisplayBoard(false);
+            String cmd = sc.nextLine();
 
-            int row = getRow()-1;
-            int col = getCol()-1;
-
-            if(row < 0 || row >=9 || col < 0 || col >=9){
-                System.out.println("Invalid Movement.");
-                continue;
-            }
-
-            if(!brd.revealCells(row,col)){
-                System.out.println("You hitted a Bomb! Game Over.");
-                brd.DisplayBoard(true);
-                isOver = true;
-            }
-            else if(brd.gameWon()) {
-                System.out.println("You won!");
-                brd.DisplayBoard(true);
-                isOver = true;
-            }
+            Commands(cmd);
         }
-        sc.close();
     }
 
     private String getNickName(){
         System.out.print("Enter your nickname: ");
         return sc.nextLine();
+    }
+
+    private int[] parseCoordinates(String rowToken, String colToken){
+        try{
+            rowToken = rowToken.toUpperCase();
+            int row = (int) rowToken.charAt(0) - '@';
+            row--;
+            int col = toInt(colToken)-1;
+            if(row<0 || row >=9 || col<0 || col >=9){
+                System.out.println("Invalid Movement.");
+                return null;
+            }
+            return new int[]{row,col};
+        }catch (NumberFormatException e){
+            System.out.println("Invalid number format. Row and column must be integers.");
+            return null;
+        }
+    }
+
+    private void Commands(String command){
+        String[] tokens = command.split(" ");
+        switch(tokens[0]){
+            case "open" -> {
+                int[] coords = parseCoordinates(tokens[1], tokens[2]);
+                if(coords != null){
+                    brd.revealCells(coords[0],coords[1]);
+                    if(!brd.revealCells(coords[0],coords[1])){
+                        System.out.println("You hit a Bomb! Game Over.");
+                        brd.DisplayBoard(true);
+                        isOver = true;
+                        enterContinue();
+                    }
+                    else if(brd.gameWon()) {
+                        System.out.println("You won!");
+                        brd.DisplayBoard(true);
+                        isOver = true;
+                        enterContinue();
+                    }
+                }
+            }
+            case "flag" -> System.out.println("Flagging");
+            case "hint" -> System.out.println("Hint");
+            case "cheat" -> System.out.println("Cheat");
+        }
     }
 
     private int toInt(String num){
@@ -72,10 +100,7 @@ public class Player {
     private void LoadTable() {
         File file = new File("Top10.dat");
         if (!file.exists()) {
-            System.out.println("Top10.dat not found. Initializing default leaderboard.");
-            for (int i = 0; i < top10Wins.length; i++) {
-                top10Wins[i] = "No record";
-            }
+            Arrays.fill(top10Wins, "No record");
             return;
         }
 
@@ -100,11 +125,12 @@ public class Player {
             System.out.println("| "+(i+1)+". "+top10Wins[i] + "       |");
         }
         System.out.println("|____________________|");
+        enterContinue();
     }
 
     public void enterContinue(){
-        System.out.println("Pressione enter para continuar...");
-        sc = new Scanner(System.in);
-        sc.nextLine();
+        System.out.println("Press Enter to continue");
+        try{System.in.read();}
+        catch(Exception e){}
     }
 }

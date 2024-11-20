@@ -23,16 +23,22 @@ public class Board {
     }
 
     public void DisplayBoard(boolean showMines) {
+        System.out.print("  ");
         for (int i = 0; i < 9; i++) {
+            System.out.print("||"+(i+1));
+        }
+        System.out.println();
+        for (int i = 0; i < 9; i++) {
+            System.out.print((char)(i+'A')+" | ");
             for (int j = 0; j < 9; j++) {
                 if(revealed[i][j]) {
-                    System.out.print(board[i][j] + "");
+                    System.out.print(board[i][j] + "  ");
                 }
                 else if(mines[i][j] && showMines){
-                    System.out.print("b");
+                    System.out.print("b  ");
                 }
                 else{
-                    System.out.print("*");
+                    System.out.print("*  ");
                 }
             }
             System.out.println();
@@ -43,7 +49,7 @@ public class Board {
         Random rnd = new Random();
         int placedMines = 0;
 
-        while (placedMines <= 10) {
+        while (placedMines < 10) {
             int row = rnd.nextInt(9);
             int col = rnd.nextInt(9);
 

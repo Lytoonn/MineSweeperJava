@@ -11,33 +11,33 @@ public class Main {
     private static Board brd;
 
     public static void main(String[] args) {
-        brd = new Board();
-        plr = new Player(brd);
         Scanner sc = new Scanner(System.in);
 
         while(true) {
+            brd = new Board();
+            plr = new Player(brd);
             String aux = null;
-            int choice;
+            int choice = -99;
 
             InitialMenu();
-            do{
-                aux = sc.nextLine();
-                try{
-                    choice = Integer.parseInt(aux);
-                }catch(NumberFormatException e){
-                    System.out.println("Please enter a valid Input.");
-                    choice = -1;
-                }
-            }while(choice <= 0 && choice > 4);
+
+            aux = sc.nextLine();
+            try {
+                choice = Integer.parseInt(aux);
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid Input.");
+                choice = -1;
+            }
 
             switch(choice) {
                 case 1 -> plr.game();
-                case 2 -> {
-                    plr.printTop();
-                    plr.enterContinue();
-                }
+                case 2 -> plr.printTop();
                 case 3 -> credits();
                 case 4 -> System.exit(0);
+                default -> {
+                    System.out.println("Please enter a valid Input.");
+                    plr.enterContinue();
+                }
             }
         }
     }
